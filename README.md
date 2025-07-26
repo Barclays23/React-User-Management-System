@@ -11,21 +11,15 @@ A full-stack user management system built with React, Node.js, Express, MongoDB,
 - ☁️ Cloudinary for image uploads
 - 🔔 Toast notifications
 
+## 🚀 Features
+
+- 🔐 User Registration & Login (JWT-based)
+- 👤 User Profile Management with Image Upload
+- 🛡️ Admin Dashboard with User Role Management
+- 📷 Cloudinary Integration for Secure Image Storage
+- 📁 MVC Architecture for Clean Backend Code Separation
+- 📢 Real-time Notifications using Toasts
+- ✅ Form Validations and Error Handling
+- 📊 Redux-based Global State Management
+
 ## 📁 Project Structure (Monorepo)
-
-🚀 Features
-🔐 User Registration & Login (JWT-based)
-
-👤 User Profile Management with Image Upload
-
-🛡️ Admin Dashboard with User Role Management
-
-📷 Cloudinary Integration for Secure Image Storage
-
-📁 MVC Architecture for Clean Backend Code Separation
-
-📢 Real-time Notifications using Toasts
-
-✅ Form Validations and Error Handling
-
-📊 Redux-based Global State Management
