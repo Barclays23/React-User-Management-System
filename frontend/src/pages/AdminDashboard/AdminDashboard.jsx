@@ -5,6 +5,7 @@ import apiCalls from '../../utils/api';
 import { toast } from 'react-toastify';
 
 import Swal from 'sweetalert2';
+import RippleSpinner from '../../components/LoadingSpinners/RippleSpinner';
 
 
 function AdminDashboard() {
@@ -375,8 +376,8 @@ function AdminDashboard() {
                                  <img
                                     src={
                                        user.profilePic
-                                       ? user.profilePic
-                                        || `http://localhost:5000/uploads/profile-pics/${user.profilePic}`
+                                       ? user.profilePic // cloudinary link
+                                        || `http://localhost:5000/uploads/profile-pics/${user.profilePic}`  // local store file
                                        : "/default-avatar.png"
                                     }
                                     alt={user.name}
@@ -394,7 +395,7 @@ function AdminDashboard() {
                                        : "bg-green-600 text-white"
                                     }`}
                                  >
-                                    {user.role}
+                                    {user?.role || user?.isAdmin}
                                  </span>
                                  </td>
                                  <td className="px-6 py-4 text-center space-x-2">

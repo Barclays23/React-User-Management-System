@@ -72,3 +72,5 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 export default User;
+
+export { userSchema }; // 👈 Export schema separately (Perfect for reuse in migration/sync)
