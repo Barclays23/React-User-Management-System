@@ -33,7 +33,7 @@ const allowedOrigins = ['https://react-user-management-system-tau.vercel.app', '
 app.use(cors({
   // origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   // origin: process.env.FRONTEND_URL,
-  origin: 'https://react-user-management-23.vercel.app/',
+  origin: 'https://react-user-management-23.vercel.app',
   credentials: true,
 }));
 
