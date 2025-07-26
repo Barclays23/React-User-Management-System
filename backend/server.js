@@ -26,13 +26,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// ✅ Replace this with your Vercel frontend URL
+const allowedOrigins = ['https://react-user-management-system-tau.vercel.app', 'http://localhost:5173',];
+
+
 app.use(cors({
   // origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   // origin: process.env.FRONTEND_URL,
-    origin: [
-    'http://localhost:5173',
-    'https://react-user-management-system-tau.vercel.app'
-  ],
+  origin: allowedOrigins,
   credentials: true,
 }));
 
