@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 
 
 function Login() {
+  console.log('vercel test for login........');
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
