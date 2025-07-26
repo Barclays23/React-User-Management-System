@@ -105,13 +105,12 @@ const registerUser = async (req, res) => {
       const accessToken = generateAccessToken(userData._id);
       const refreshToken = generateRefreshToken(userData._id);
 
+      const isProduction = process.env.NODE_ENV === 'production'; // ✅ false in development
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',  // ✅ false in development
-        sameSite: 'lax', // if frontend/backend are on different domains or ports
-        // sameSite: 'none', // (requires secure: true)
-        // sameSite: 'strict',  // if same origins
-        maxAge: 30 * 60 * 1000, // 30 minutes
+        secure: isProduction,                       // true in production (HTTPS)
+        sameSite: isProduction ? 'none' : 'lax',    // 'none' for cross-domain cookies in prod.  'lax' if frontend/backend are on different domains or ports
+        maxAge: 30 * 60 * 1000                      // 30 minutes
       });
 
 
@@ -168,13 +167,12 @@ const loginUser = async (req, res) => {
 
     console.log('tokens generated...');
 
+    const isProduction = process.env.NODE_ENV === 'production'; // ✅ false in development
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',  // ✅ false in development
-      sameSite: 'lax', // if frontend/backend are on different domains or ports
-      // sameSite: 'none', // (requires secure: true)
-      // sameSite: 'strict',  // if same origins
-      maxAge: 30 * 60 * 1000, // 30 minutes
+      secure: isProduction,                       // true in production (HTTPS)
+      sameSite: isProduction ? 'none' : 'lax',    // 'none' for cross-domain cookies in prod.  'lax' if frontend/backend are on different domains or ports
+      maxAge: 30 * 60 * 1000                      // 30 minutes
     });
 
     console.log('refresh token set in cookies...');
@@ -204,11 +202,11 @@ const loginUser = async (req, res) => {
 // ✅
 const logoutUser = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie('refreshToken', {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production',
-      secure: false, // because NODE_ENV=development
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
     });
 
     res.status(200).json({ message: 'Logged out successfully' });
