@@ -98,7 +98,7 @@ npm start
 
 Note: The application will be available at:
 
-Frontend: http://localhost:3000
+Frontend: http://localhost:5173
 Backend: http://localhost:5000
 
 Important: Ensure MongoDB Atlas and Cloudinary accounts are set up, and their credentials are added to the .env file before starting the servers.
@@ -210,4 +210,4 @@ Ready for deployment and contribution
 
 ## 🌐 Live Demo
 
-Check out the live demo [here](https://your-app-demo-url.com).
+Check out the live demo [here](https://react-user-management-23.vercel.app/).
