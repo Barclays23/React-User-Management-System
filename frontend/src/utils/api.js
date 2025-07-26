@@ -48,7 +48,6 @@ const axiosClient = axios.create({
   // headers: {
   //   'Content-Type': 'application/json',
   // },  // no need for default Content-Type — axios will set it per request type
-
 });
 
 
