@@ -18,6 +18,7 @@ dotenv.config();
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 // Initialize Express app
 const app = express();
@@ -27,13 +28,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ✅ Replace this with your Vercel frontend URL
-const allowedOrigins = ['https://react-user-management-system-tau.vercel.app', 'http://localhost:5173',];
+const allowedOrigins = [
+  'https://react-user-management-23.vercel.app', 
+  'https://react-user-management-system-tau.vercel.app', 
+  'http://localhost:5173',
+];
 
 
 app.use(cors({
   // origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  // origin: process.env.FRONTEND_URL,
-  origin: 'https://react-user-management-23.vercel.app',
+  // origin: 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 
@@ -51,6 +56,7 @@ connectDB();
 // Define API routes
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
