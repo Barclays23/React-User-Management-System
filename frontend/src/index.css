@@ -9,9 +9,29 @@ body {
   background: linear-gradient(180deg, rgb(247, 247, 247), rgb(138, 200, 248));
 }
 
+
+
 .Toastify__toast {
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   min-height: 60px;
-  font-size: 14.5px;
-  padding: 12px 16px;
+  margin-top: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+/* For smaller screens like mobile */
+@media (max-width: 480px) {
+  .Toastify__toast {
+    font-size: 0.8rem;
+    max-width: 270px;
+  }
+}
+
+/* For larger screens */
+@media (min-width: 768px) {
+  .Toastify__toast {
+    font-size: 0.9rem;
+  }
 }

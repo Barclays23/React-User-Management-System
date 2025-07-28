@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { setCredentials } from '../../redux/slices/authSlice';
 import apiCalls from '../../utils/api';
 import { toast } from 'react-toastify';
+import RippleSpinner from '../../components/LoadingSpinners/RippleSpinner';
 
 
 function Login() {
@@ -72,7 +73,7 @@ function Login() {
         return;
       }
 
-      console.log('Redux state - Before dispatch :', { isAuthenticated, user, accessToken });
+      // console.log('Redux state - Before dispatch :', { isAuthenticated, user, accessToken });
       
       // Dispatch the action to store the res in redux state.
       dispatch(setCredentials({ 
@@ -93,6 +94,11 @@ function Login() {
     }
   };
 
+
+
+  if (loading) {
+    return <RippleSpinner/>
+  }
 
 
   return (

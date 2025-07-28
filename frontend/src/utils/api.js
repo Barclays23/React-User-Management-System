@@ -64,6 +64,7 @@ axiosClient.interceptors.request.use((config) => {
 
 
 let hasTokenExpiredToastShown = false;
+let isRefreshingToken = false;
 
 // Response interceptor for token refresh
 axiosClient.interceptors.response.use(
@@ -77,9 +78,11 @@ axiosClient.interceptors.response.use(
       error.response?.status === 401 &&
       !originalRequest._retry &&
       accessToken &&
-      originalRequest.url !== '/user/refresh-token'
+      originalRequest.url !== '/auth/refresh-token'
     ) {
+
       originalRequest._retry = true;
+      isRefreshingToken = true;
 
       try {
         console.log('Attempting to refresh access token');
@@ -96,24 +99,27 @@ axiosClient.interceptors.response.use(
         store.dispatch(updateAccessToken({newAccessToken}));
         console.log('newAccessToken dispatched to reducer/store');
         
-        
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        isRefreshingToken = false;
         return axiosClient(originalRequest);
 
       } catch (refreshError) {
         // this error comes from the userController.refreshAccessToken (catch block)
         console.error('refreshError in intercepter :', refreshError.response?.data || refreshError.message);
         
+        isRefreshingToken = false;
+
         if (!hasTokenExpiredToastShown) {
-          const errorMessage = refreshError.response?.data?.message || "Session expired."
-          toast.error(errorMessage)
           hasTokenExpiredToastShown = true;
+
+          setTimeout(() => {
+            const errorMessage = refreshError.response?.data?.message || "Session expired.";
+            toast.error(errorMessage);
+          }, 0); // schedule after current call stack
         }
         
         store.dispatch(removeCredentials());
-        
-        // window.location.href = '/login';
-        console.log('redirecting to login page (called from axios intercepter refreshError');
+        console.log('removeCredentials called from axios intercepter refreshError');
 
         return Promise.reject(refreshError);
       }
@@ -130,27 +136,27 @@ axiosClient.interceptors.response.use(
 // API calls object (NEW)
 const apiCalls = {
   getAuthUser: async () => {
-    const response = await axiosClient.get('/user/me'); // ✅ token automatically added in headers (in intercepter)
+    const response = await axiosClient.get('/auth/me'); // ✅ token automatically added in headers (in intercepter)
     return response.data;
   },
 
   refreshAccessToken: async () => {
-    const res = await axiosClient.post('/user/refresh-token');
+    const res = await axiosClient.post('/auth/refresh-token');
     return res.data; // newAccessToken returning to axiosClient.interceptors.response
   },
 
   signUp: async (formData) => {
-    const response = await axiosClient.post('/user/register', formData);
+    const response = await axiosClient.post('/auth/register', formData);
     return response.data;
   },
 
   signIn: async (formData) => {
-    const response = await axiosClient.post('/user/login', formData);
+    const response = await axiosClient.post('/auth/login', formData);
     return response.data;
   },
 
   signOut: async () => {
-    const response = await axiosClient.post('/user/logout');
+    const response = await axiosClient.post('/auth/logout');
     return response.data;
   },
 

@@ -15,18 +15,18 @@ function Profile() {
    const [email, setEmail] = useState(user?.email || "");
    const [mobile, setMobile] = useState(user?.mobile || "");
    const [profileImage, setProfileImage] = useState(null);
-
-
-   const [currentPassword, setCurrentPassword] = useState("");
-   const [newPassword, setNewPassword] = useState("");
-   const [newPasswordError, setNewPasswordError] = useState('');
-   const [currentPasswordError, setCurrentPasswordError] = useState('');
-
-
+   
    // Error states
    const [nameError, setNameError] = useState('');
    const [emailError, setEmailError] = useState('');
    const [mobileError, setMobileError] = useState('');
+   const [imageError, setImageError] = useState('');
+   
+   const [currentPassword, setCurrentPassword] = useState("");
+   const [newPassword, setNewPassword] = useState("");
+   const [newPasswordError, setNewPasswordError] = useState('');
+   const [currentPasswordError, setCurrentPasswordError] = useState('');
+   
    
    const [showEditProfile, setShowEditProfile] = useState(false);
    const [showChangePassword, setShowChangePassword] = useState(false);
@@ -84,6 +84,8 @@ function Profile() {
       }  else if (trimmedName.length > 25) {
          setNameError('Name should not exceed 25 characters.');
          isValid = false;
+      }  else if (imageError) {
+         isValid = false;
       } else {
          setNameError('');
       }
@@ -124,6 +126,7 @@ function Profile() {
       e.preventDefault();
 
       if (!validateForm()) return;
+      setLoading(true);
 
       const formData = new FormData();
       formData.append("name", name);
@@ -135,11 +138,9 @@ function Profile() {
       }
 
       try {
-         setLoading(true);
          const data = await apiCalls.updateProfile(formData);
-         dispatch(updateUser(data));
          toast.success("Profile updated successfully");
-
+         dispatch(updateUser(data));
          setShowEditProfile(false);
          setPreviewImage(null);
 
@@ -150,7 +151,7 @@ function Profile() {
          toast.error(errorMessage);
          
       } finally {
-         setLoading(false);
+         setTimeout(() => setLoading(false), 300);
       }
    };
 
@@ -231,22 +232,21 @@ function Profile() {
    }
 
    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
-         <div className="w-full max-w-md bg-gray-900 rounded-lg shadow-lg shadow-blue-800 p-8 relative text-gray-100">
-
-            {/* Edit Profile Button */}
+      <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4 sm:p-6 md:p-10">
+         <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-xl shadow-lg shadow-blue-800 p-6 sm:p-8 md:p-10 text-gray-100 relative">
+            {/* Edit Button */}
             <button
                onClick={() => {
                setShowEditProfile(!showEditProfile);
                setShowChangePassword(false);
                }}
-               className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 transition-colors cursor-pointer"
+               className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 transition-colors"
                title="Edit Profile"
             >
                <FiEdit className="w-6 h-6" />
             </button>
 
-            {/* Profile Info */}
+            {/* Profile Header */}
             <div className="text-center">
                <div className="relative inline-block">
                {previewImage || user?.profilePic ? (
@@ -254,106 +254,123 @@ function Profile() {
                      src={
                      previewImage
                         ? previewImage
-                        : user?.profilePic ? 
-                           user.profilePic
-                           || `http://localhost:5000/uploads/profile-pics/${user.profilePic}`
-                        : "/default-avatar.png"
+                        : user?.profilePic ||
+                           `/uploads/profile-pics/${user.profilePic}`
                      }
                      alt="Profile"
-                     className="w-24 h-24 rounded-full object-cover border-4 border-blue-300"
+                     className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-blue-300"
                   />
                ) : (
-                  <div className="w-24 h-24 rounded-full border-4 border-blue-300 flex items-center justify-center bg-gray-800">
-                     <FiUser className="w-12 h-12 text-gray-400" />
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-4 border-blue-300 flex items-center justify-center bg-gray-800">
+                     <FiUser className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
                   </div>
                )}
 
-               {/* Upload Button */}
                {showEditProfile && (
-                  <button
-                     onClick={() =>
-                     document.getElementById("profileImageInput").click()
-                     }
-                     className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
-                     title="Change Profile Image"
-                  >
-                     <FiCamera className="w-4 h-4" />
-                  </button>
+                  <>
+                     <button
+                        onClick={() =>
+                           document.getElementById("profileImageInput").click()
+                        }
+                        className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                        title="Change Profile Image"
+                        >
+                        <FiCamera className="w-4 h-4" />
+                     </button>
+                     <input
+                        id="profileImageInput"
+                        type="file"
+                        onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                           if (file.size > 5 * 1024 * 1024) { // 5MB
+                              setImageError('Image size must be less than 5MB.');
+                              setProfileImage(null);
+                              setPreviewImage(null);
+                           } else {
+                              setProfileImage(file);
+                              setPreviewImage(URL.createObjectURL(file));
+                              setImageError('');
+                           }
+                        }
+                        }}
+                        className="hidden"
+                     />
+                  </>
                )}
-               <input
-                  id="profileImageInput"
-                  type="file"
-                  onChange={(e) => {
-                     const file = e.target.files[0];
-                     if (file) {
-                     setProfileImage(file);
-                     setPreviewImage(URL.createObjectURL(file));
-                     }
-                  }}
-                  className="hidden"
-               />
                </div>
-               <h2 className="text-2xl font-bold text-white mt-4">
-               {user?.name || "User Name"}
+               {imageError && (<p className="text-xs text-red-500 mt-2 text-center">{imageError}</p>)}
+
+               <h2 className="text-xl sm:text-2xl font-bold text-white mt-4">
+               {user?.name}
                </h2>
-               <p className="text-gray-400">{user?.email || "user@example.com"}</p>
-               <p className="text-gray-400">{user?.mobile || "No mobile number"}</p>
+               <p className="text-gray-400 text-sm sm:text-base">{user?.email}</p>
+               <p className="text-gray-400 text-sm sm:text-base">
+               {user?.mobile}
+               </p>
             </div>
 
-            {/* Edit Profile Form */}
+            {/* Edit Profile */}
             {showEditProfile && (
                <div className="mt-6 border-t border-gray-700 pt-6">
-               <h3 className="text-lg font-semibold text-white mb-4">Edit Profile</h3>
+               <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
                <form onSubmit={handleProfileUpdate} className="space-y-4">
-                  {/* Name */}
                   <div>
-                     <label className="block text-sm font-medium text-gray-300">Name</label>
+                     <label className="block text-sm sm:text-base font-medium">
+                     Name
+                     </label>
                      <input
                      type="text"
                      value={name}
                      onChange={(e) => setName(e.target.value)}
-                     className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                     className="w-full px-3 py-2 text-sm sm:text-base bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
                      />
-                     {nameError && <p className="text-sm text-red-400">{nameError}</p>}
+                     {nameError && (
+                     <p className="text-sm text-red-400">{nameError}</p>
+                     )}
                   </div>
 
-                  {/* Email */}
                   <div>
-                     <label className="block text-sm font-medium text-gray-300">Email</label>
+                     <label className="block text-sm sm:text-base font-medium">
+                     Email
+                     </label>
                      <input
                      type="email"
                      value={email}
                      onChange={(e) => setEmail(e.target.value)}
-                     className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                     className="w-full px-3 py-2 text-sm sm:text-base bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
                      />
-                     {emailError && <p className="text-sm text-red-400">{emailError}</p>}
+                     {emailError && (
+                     <p className="text-sm text-red-400">{emailError}</p>
+                     )}
                   </div>
 
-                  {/* Mobile */}
                   <div>
-                     <label className="block text-sm font-medium text-gray-300">Mobile Number</label>
+                     <label className="block text-sm sm:text-base font-medium">
+                     Mobile
+                     </label>
                      <input
                      type="text"
                      value={mobile}
                      onChange={(e) => setMobile(e.target.value)}
-                     className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                     placeholder="Enter mobile number"
+                     className="w-full px-3 py-2 text-sm sm:text-base bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
                      />
-                     {mobileError && <p className="text-sm text-red-400">{mobileError}</p>}
+                     {mobileError && (
+                     <p className="text-sm text-red-400">{mobileError}</p>
+                     )}
                   </div>
 
-                  {/* Buttons */}
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                      <button
                      type="button"
                      onClick={handleCancel}
-                     className="flex-1 bg-gray-700 text-white p-2 rounded-md hover:bg-gray-600 transition cursor-pointer"
+                     className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600"
                      >
                      Cancel
                      </button>
                      <button
                      type="submit"
-                     className="flex-1 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition cursor-pointer"
+                     className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
                      >
                      Save Changes
                      </button>
@@ -362,7 +379,7 @@ function Profile() {
                </div>
             )}
 
-            {/* Change Password Toggle */}
+            {/* Change Password */}
             {!showChangePassword ? (
                <div className="mt-6 text-center border-t border-gray-700 pt-6">
                <button
@@ -370,62 +387,72 @@ function Profile() {
                      setShowChangePassword(true);
                      setShowEditProfile(false);
                   }}
-                  className="text-blue-400 hover:text-blue-500 font-medium transition cursor-pointer"
+                  className="text-blue-400 hover:text-blue-500 font-medium text-sm sm:text-base"
                >
                   Change Password
                </button>
                </div>
             ) : (
                <form
-                  onSubmit={handlePasswordUpdate} 
-                  className="mt-6 border-t border-gray-700 pt-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">Change Password</h3>
-                  <div className="space-y-4">
-                     {/* Current Password */}
-                     <div>
-                        <label className="block text-sm font-medium text-gray-300">Current Password</label>
-                        <input
-                        type="password"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {currentPasswordError && <p className="text-sm text-red-400 mt-1">{currentPasswordError}</p>}
-                     </div>
-
-                     {/* New Password */}
-                     <div>
-                        <label className="block text-sm font-medium text-gray-300">New Password</label>
-                        <input
-                        type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {newPasswordError && <p className="text-sm text-red-400 mt-1">{newPasswordError}</p>}
-                     </div>
-
-                     {/* Buttons */}
-                     <div className="flex space-x-4">
-                        <button
-                           type="button"
-                           onClick={() => setShowChangePassword(false)}
-                           className="flex-1 bg-gray-700 text-white p-2 rounded-md hover:bg-gray-600 transition cursor-pointer"
-                        >
-                           Cancel
-                        </button>
-                        <button
-                           className="flex-1 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition cursor-pointer"
-                        >
-                           Save Password
-                        </button>
-                     </div>
+               onSubmit={handlePasswordUpdate}
+               className="mt-6 border-t border-gray-700 pt-6"
+               >
+               <h3 className="text-lg font-semibold mb-4">Change Password</h3>
+               <div className="space-y-4">
+                  <div>
+                     <label className="block text-sm font-medium">
+                     Current Password
+                     </label>
+                     <input
+                     type="password"
+                     value={currentPassword}
+                     onChange={(e) => setCurrentPassword(e.target.value)}
+                     className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
+                     />
+                     {currentPasswordError && (
+                     <p className="text-sm text-red-400">
+                        {currentPasswordError}
+                     </p>
+                     )}
                   </div>
+
+                  <div>
+                     <label className="block text-sm font-medium">
+                     New Password
+                     </label>
+                     <input
+                     type="password"
+                     value={newPassword}
+                     onChange={(e) => setNewPassword(e.target.value)}
+                     className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
+                     />
+                     {newPasswordError && (
+                     <p className="text-sm text-red-400">{newPasswordError}</p>
+                     )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                     <button
+                     type="button"
+                     onClick={() => setShowChangePassword(false)}
+                     className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+                     >
+                     Cancel
+                     </button>
+                     <button
+                     type="submit"
+                     className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                     >
+                     Save Password
+                     </button>
+                  </div>
+               </div>
                </form>
             )}
          </div>
       </div>
    );
+
 }
 
 export default Profile;
