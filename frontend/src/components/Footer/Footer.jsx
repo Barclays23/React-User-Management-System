@@ -3,7 +3,7 @@ function Footer() {
 
   return (
     <footer className="bg-gray-800 font-mono text-blue-200 py-4 text-center">
-      <p className="px-1 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
+      <p className="px-1 text-xs sm:text-sm md:text-base lg:text-md xl:text-lg">
         &copy; {currentYear} User Management App. All rights reserved.
       </p>
     </footer>
