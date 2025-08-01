@@ -240,7 +240,7 @@ function Profile() {
                setShowEditProfile(!showEditProfile);
                setShowChangePassword(false);
                }}
-               className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 transition-colors"
+               className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 transition-colors cursor-pointer"
                title="Edit Profile"
             >
                <FiEdit className="w-6 h-6" />
@@ -272,7 +272,7 @@ function Profile() {
                         onClick={() =>
                            document.getElementById("profileImageInput").click()
                         }
-                        className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                        className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
                         title="Change Profile Image"
                         >
                         <FiCamera className="w-4 h-4" />
@@ -362,17 +362,17 @@ function Profile() {
 
                   <div className="flex flex-col sm:flex-row gap-4">
                      <button
-                     type="button"
-                     onClick={handleCancel}
-                     className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+                        type="button"
+                        onClick={handleCancel}
+                        className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600 cursor-pointer"
                      >
-                     Cancel
+                        Cancel
                      </button>
                      <button
-                     type="submit"
-                     className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                        type="submit"
+                        className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer"
                      >
-                     Save Changes
+                        Save Changes
                      </button>
                   </div>
                </form>
@@ -387,7 +387,7 @@ function Profile() {
                      setShowChangePassword(true);
                      setShowEditProfile(false);
                   }}
-                  className="text-blue-400 hover:text-blue-500 font-medium text-sm sm:text-base"
+                  className="text-blue-400 hover:text-blue-500 font-medium text-sm sm:text-base cursor-pointer"
                >
                   Change Password
                </button>
@@ -435,13 +435,13 @@ function Profile() {
                      <button
                      type="button"
                      onClick={() => setShowChangePassword(false)}
-                     className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+                     className="bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600 cursor-pointer"
                      >
                      Cancel
                      </button>
                      <button
                      type="submit"
-                     className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                     className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer"
                      >
                      Save Password
                      </button>
