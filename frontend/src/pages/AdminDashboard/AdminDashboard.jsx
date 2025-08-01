@@ -289,12 +289,12 @@ function AdminDashboard() {
 
             <div className="bg-gradient-to-b from-blue-200 to-gray-700 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
                <div className="text-right mb-6">
-               <button
-                  onClick={() => setShowModal(true)}
-                  className="text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 py-2 rounded-full hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
-               >
-                  Create User
-               </button>
+                  <button
+                     onClick={() => setShowModal(true)}
+                     className="text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 py-2 rounded-full hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md cursor-pointer"
+                  >
+                     Create User
+                  </button>
                </div>
 
                {error && (
@@ -341,7 +341,7 @@ function AdminDashboard() {
                <button
                   onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   disabled={page === 1}
-                  className="px-4 py-1 sm:py-2 bg-gray-700 hover:bg-gray-800 text-white rounded disabled:opacity-50"
+                  className="px-4 py-1 sm:py-2 bg-gray-700 hover:bg-gray-800 text-white rounded disabled:opacity-50 cursor-pointer"
                >
                   Prev
                </button>
@@ -351,7 +351,7 @@ function AdminDashboard() {
                <button
                   onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={page === totalPages}
-                  className="px-4 py-1 sm:py-2 bg-gray-700 hover:bg-gray-800 text-white rounded disabled:opacity-50"
+                  className="px-4 py-1 sm:py-2 bg-gray-700 hover:bg-gray-800 text-white rounded disabled:opacity-50 cursor-pointer"
                >
                   Next
                </button>
@@ -413,13 +413,13 @@ function AdminDashboard() {
                               <div className="flex items-center justify-center gap-2">
                                  <button
                                     onClick={() => handleEdit(user)}
-                                    className="text-[10px] sm:text-xs bg-indigo-500 hover:bg-indigo-700 text-white px-2 py-1 rounded-full"
+                                    className="text-[10px] sm:text-xs bg-indigo-500 hover:bg-indigo-700 text-white px-2 py-1 rounded-full cursor-pointer"
                                  >
                                     Edit
                                  </button>
                                  <button
                                     onClick={() => handleDelete(user._id)}
-                                    className="text-[10px] sm:text-xs bg-red-600 hover:bg-red-800 text-white px-2 py-1 rounded-full"
+                                    className="text-[10px] sm:text-xs bg-red-600 hover:bg-red-800 text-white px-2 py-1 rounded-full cursor-pointer"
                                  >
                                     Delete
                                  </button>
@@ -472,13 +472,13 @@ function AdminDashboard() {
                      <div className="mt-4 flex gap-2">
                      <button
                         onClick={() => handleEdit(user)}
-                        className="bg-indigo-600 hover:bg-indigo-800 text-white px-3 py-1 rounded-full text-sm"
+                        className="bg-indigo-600 hover:bg-indigo-800 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
                      >
                         Edit
                      </button>
                      <button
                         onClick={() => handleDelete(user._id)}
-                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm"
+                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
                      >
                         Delete
                      </button>
@@ -618,13 +618,13 @@ function AdminDashboard() {
                                  <button
                                     type="button"
                                     onClick={resetForm}
-                                    className="px-4 py-1.5 text-sm bg-gray-700 text-white border border-gray-600 rounded-lg hover:bg-gray-800 transition"
+                                    className="px-4 py-1.5 text-sm bg-gray-700 text-white border border-gray-600 rounded-lg hover:bg-gray-800 transition cursor-pointer"
                                  >
                                     Cancel
                                  </button>
                                  <button
                                     type="submit"
-                                    className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-800 transition"
+                                    className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-800 transition cursor-pointer"
                                  >
                                     {editId ? "Update" : "Create"}
                                  </button>
