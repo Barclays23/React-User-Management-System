@@ -17,7 +17,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      console.log('Before setCredentials:', { currentState: state, payload: action.payload });
+      // console.log('Before setCredentials:', { currentState: state, payload: action.payload });
 
       state.user = action.payload.user;
       state.isAuthenticated = !!action.payload.user;
@@ -25,7 +25,7 @@ const authSlice = createSlice({
       localStorage.setItem('accessToken', action.payload.accessToken);
       localStorage.setItem('user', JSON.stringify(action.payload.user));  // Persist user
 
-      console.log('After setCredentials:', { newState: state });
+      // console.log('After setCredentials:', { newState: state });
     },
 
     // Update only the access token (for refresh)
@@ -45,7 +45,7 @@ const authSlice = createSlice({
     
     // Logout user
     removeCredentials: (state) => {
-      console.log('removeCredentials called in redux.');
+      // console.log('removeCredentials called in redux.');
       
       state.user = null;
       state.isAuthenticated = false;
@@ -53,7 +53,7 @@ const authSlice = createSlice({
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
 
-      console.log('State removed from redux & localStorage.');
+      // console.log('State removed from redux & localStorage.');
     },
   },
 });
